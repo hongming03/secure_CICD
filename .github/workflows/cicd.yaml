@@ -53,11 +53,16 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for better analysis
 
-      - name: SonarQube Scan
+      - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@master
+        with:
+            args: >
+                -Dsonar.projectKey=hongming03
+                -Dsonar.organization=hongming03
+                -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            SONAR_HOST_URL: https://sonarcloud.io
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # Optional: Quality Gate check
       # - name: SonarQube Quality Gate
