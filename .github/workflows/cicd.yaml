@@ -2,11 +2,8 @@ name: DevSecOps CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/flask-app
@@ -38,26 +35,26 @@ jobs:
           coverage xml
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-report
           path: coverage.xml
 
   # 2. SAST - SonarQube Scan
-#   sonarqube_sast:
-#     runs-on: ubuntu-latest
-#     needs: unit_test
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 0  # Shallow clones should be disabled for better analysis
+  sonarqube_sast:
+    runs-on: ubuntu-latest
+    needs: unit_test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
 
-#       - name: SonarQube Scan
-#         uses: sonarsource/sonarqube-scan-action@master
-#         env:
-#           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # Optional: Quality Gate check
       # - name: SonarQube Quality Gate
@@ -93,7 +90,7 @@ jobs:
           args: --severity-threshold=high
 
       - name: Upload Snyk report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: snyk-report
@@ -102,7 +99,7 @@ jobs:
   # 4. Build and Push Docker Image
   build_and_push:
     runs-on: ubuntu-latest
-    # needs: [sonarqube_sast, snyk_sca]
+    needs: [sonarqube_sast, snyk_sca]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
