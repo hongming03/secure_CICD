@@ -55,7 +55,6 @@ jobs:
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@master
-        continue-on-error: true
         with:
             args: >
                 -Dsonar.projectKey=hongming03_secure_CICD
@@ -92,7 +91,7 @@ jobs:
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
-        # continue-on-error: true  # You can't use cloud to monitor and CLI to test at the same time
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
