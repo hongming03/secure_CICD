@@ -57,8 +57,8 @@ jobs:
         uses: sonarsource/sonarqube-scan-action@master
         with:
             args: >
-                -Dsonar.projectKey=secure_CICD
-                -Dsonar.organization=HongMing
+                -Dsonar.projectKey=hongming03_secure_CICD
+                -Dsonar.organization=hongming03
                 -Dsonar.python.coverage.reportPaths=coverage.xml
         env:
             SONAR_HOST_URL: https://sonarcloud.io
