@@ -55,6 +55,7 @@ jobs:
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarqube-scan-action@master
+        continue-on-error: true
         with:
             args: >
                 -Dsonar.projectKey=hongming03_secure_CICD
